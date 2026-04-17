@@ -147,11 +147,6 @@ const HomePage: React.FC = () => {
           </Link>
         </div>
 
-        {error && (
-          <div className="mb-4 p-4 bg-red-50 text-red-600 rounded-xl text-sm">
-            Firestore error: {error} — Showing {upcomingWorkshops.length} workshops
-          </div>
-        )}
         {loading ? (
           <div className="flex justify-center py-20">
             <div className="w-10 h-10 border-4 border-zinc-200 border-t-[#fdcc00] rounded-full animate-spin" />
@@ -159,7 +154,7 @@ const HomePage: React.FC = () => {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
             {upcomingWorkshops.map((workshop, i) => (
-              <div key={workshop.id} className={`reveal-on-scroll delay-${(i + 1) * 100}`}>
+              <div key={workshop.id} className={`reveal-on-scroll is-visible delay-${(i + 1) * 100}`}>
                  <WorkshopCard workshop={workshop} />
               </div>
             ))}
