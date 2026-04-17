@@ -154,7 +154,7 @@ const HomePage: React.FC = () => {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
             {upcomingWorkshops.map((workshop, i) => (
-              <div key={workshop.id} className={`reveal-on-scroll is-visible delay-${(i + 1) * 100}`}>
+              <div key={workshop.id}>
                  <WorkshopCard workshop={workshop} />
               </div>
             ))}
