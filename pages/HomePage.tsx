@@ -6,7 +6,7 @@ import { Sparkles, ArrowRight, ChevronDown, Send, Calendar, Users, Zap, Layers, 
 import { Link } from 'react-router-dom';
 
 const HomePage: React.FC = () => {
-  const { workshops: upcomingWorkshops, loading } = useWorkshops(WorkshopStatus.UPCOMING);
+  const { workshops: upcomingWorkshops, loading, error } = useWorkshops(WorkshopStatus.UPCOMING);
 
   const scrollToSchedule = () => {
     const element = document.getElementById('upcoming-workshops');
@@ -147,6 +147,11 @@ const HomePage: React.FC = () => {
           </Link>
         </div>
 
+        {error && (
+          <div className="mb-4 p-4 bg-red-50 text-red-600 rounded-xl text-sm">
+            Firestore error: {error} — Showing {upcomingWorkshops.length} workshops
+          </div>
+        )}
         {loading ? (
           <div className="flex justify-center py-20">
             <div className="w-10 h-10 border-4 border-zinc-200 border-t-[#fdcc00] rounded-full animate-spin" />

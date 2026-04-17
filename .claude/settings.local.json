@@ -16,7 +16,9 @@
       "Bash(brew install:*)",
       "Bash(git commit:*)",
       "Bash(open \"http://localhost:3000\")",
-      "mcp__Claude_in_Chrome__tabs_context_mcp"
+      "mcp__Claude_in_Chrome__tabs_context_mcp",
+      "Bash(cp /tmp/check-firestore.mjs /Users/ulianatsvirko/Downloads/smart-lab-master-classes-3/check-firestore.mjs)",
+      "Bash(node /Users/ulianatsvirko/Downloads/smart-lab-master-classes-3/check-firestore.mjs)"
     ]
   }
 }
