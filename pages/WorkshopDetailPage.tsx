@@ -453,7 +453,7 @@ const WorkshopDetailPage: React.FC = () => {
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-4xl sm:text-6xl font-black uppercase italic tracking-tighter text-zinc-900 mb-4">
-              О <span className={primaryColor.replace('bg-', 'text-')}>мероприятии</span>
+              О <span className="text-pink-500">мероприятии</span>
             </h2>
           </div>
           <div className="text-lg sm:text-xl text-zinc-500 font-medium leading-relaxed space-y-6">

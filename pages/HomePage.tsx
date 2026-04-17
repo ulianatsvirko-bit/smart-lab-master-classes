@@ -147,12 +147,6 @@ const HomePage: React.FC = () => {
           </Link>
         </div>
 
-        {/* Debug info - remove later */}
-        <div className="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded-xl text-xs text-zinc-600">
-          Status: {loading ? 'loading...' : 'loaded'} | Count: {upcomingWorkshops.length} | Error: {error || 'none'}
-          {upcomingWorkshops.length > 0 && ` | Titles: ${upcomingWorkshops.map(w => w.title).join(', ')}`}
-        </div>
-
         {loading ? (
           <div className="flex justify-center py-20">
             <div className="w-10 h-10 border-4 border-zinc-200 border-t-[#fdcc00] rounded-full animate-spin" />
