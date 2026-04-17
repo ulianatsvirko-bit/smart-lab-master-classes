@@ -65,20 +65,11 @@ const HomePage: React.FC = () => {
               Уникальная серия мастер-классов от педагогов Smart Dance и приглашенных гостей. Прокачай свой танец, найди новых друзей и получи море вдохновения.
             </p>
 
-            {/* Action Buttons */}
-            <div className="reveal-on-scroll delay-300 flex flex-col sm:flex-row items-center justify-center gap-6 relative">
-              <Link 
-                to="/workshop/smart-love-lab#register"
-                className="group relative w-full sm:w-auto px-12 py-6 bg-[#fdcc00] overflow-hidden rounded-2xl font-black uppercase tracking-[0.2em] transition-all hover:scale-105 active:scale-95 shadow-2xl shadow-[#fdcc00]/30 text-zinc-900 text-xs sm:text-sm flex items-center justify-center gap-3"
-              >
-                <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
-                <span className="relative z-10 text-center">Записаться на ближайший мастер-класс</span>
-                <Send size={18} className="relative z-10 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1 shrink-0" />
-              </Link>
-              
-              <button 
+            {/* Action Button */}
+            <div className="reveal-on-scroll delay-300 flex items-center justify-center relative">
+              <button
                 onClick={scrollToSchedule}
-                className="group w-full sm:w-auto px-12 py-6 bg-white rounded-2xl font-black uppercase tracking-[0.2em] transition-all hover:border-[#fdcc00] hover:text-[#fdcc00] text-zinc-900 text-xs sm:text-sm border-2 border-zinc-100 text-center shadow-md flex items-center justify-center gap-3"
+                className="group w-full sm:w-auto px-12 py-6 bg-[#fdcc00] rounded-2xl font-black uppercase tracking-[0.2em] transition-all hover:scale-105 active:scale-95 text-zinc-900 text-xs sm:text-sm shadow-2xl shadow-[#fdcc00]/30 flex items-center justify-center gap-3"
               >
                 <span>Расписание</span>
                 <Calendar size={18} className="transition-transform group-hover:rotate-12 shrink-0" />
