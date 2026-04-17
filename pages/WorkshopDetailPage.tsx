@@ -324,8 +324,11 @@ const WorkshopDetailPage: React.FC = () => {
   }
 
   // Generic Layout for other workshops
+  const primaryColor = workshop.categories[0]?.color || 'bg-[#fdcc00]';
+  const primaryTextColor = primaryColor.replace('bg-', 'text-');
+
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white animate-fadeIn">
       {/* Navigation */}
       <nav className="fixed top-6 left-6 z-50">
           <Link to="/" className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-white/90 backdrop-blur-md border border-zinc-100 text-zinc-900 hover:scale-110 transition-transform shadow-lg">
@@ -333,26 +336,167 @@ const WorkshopDetailPage: React.FC = () => {
           </Link>
       </nav>
 
-      <div className="max-w-4xl mx-auto px-4 py-32">
-        <span className="inline-block px-4 py-2 rounded-full bg-zinc-100 text-zinc-500 text-[10px] font-black uppercase tracking-[0.2em] mb-6">
+      {/* Hero */}
+      {workshop.imageUrl ? (
+        <header className="relative h-[70vh] flex flex-col justify-end overflow-hidden bg-zinc-900">
+          <div className="absolute inset-0">
+            <img src={workshop.imageUrl} alt={workshop.title} className="w-full h-full object-cover opacity-80" />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-zinc-950/80" />
+          </div>
+          <div className="relative z-10 max-w-5xl mx-auto px-4 pb-12 w-full">
+            <span className="inline-block px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-[10px] font-black uppercase tracking-[0.2em] mb-4">
+              {workshop.date}
+            </span>
+            <h1 className="text-5xl sm:text-7xl font-black uppercase italic tracking-tighter text-white mb-4 leading-none">
+              {workshop.title}
+            </h1>
+            {workshop.categories.length > 0 && (
+              <div className="flex flex-wrap gap-2">
+                {workshop.categories.map((cat, idx) => (
+                  <span key={idx} className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest ${cat.color} text-zinc-950`}>
+                    {cat.name}
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
+        </header>
+      ) : (
+        <header className="pt-32 pb-16 px-4 max-w-5xl mx-auto">
+          <span className="inline-block px-4 py-2 rounded-full bg-zinc-100 text-zinc-500 text-[10px] font-black uppercase tracking-[0.2em] mb-6">
             {workshop.date}
-        </span>
-        <h1 className="text-5xl sm:text-7xl font-black uppercase italic tracking-tighter text-zinc-900 mb-8 leading-none">
+          </span>
+          <h1 className="text-5xl sm:text-7xl font-black uppercase italic tracking-tighter text-zinc-900 mb-4 leading-none">
             {workshop.title}
-        </h1>
-        
-        {workshop.imageUrl && (
-            <div className="rounded-[3rem] overflow-hidden mb-12 shadow-2xl">
-                <img src={workshop.imageUrl} alt={workshop.title} className="w-full h-auto" />
+          </h1>
+          {workshop.categories.length > 0 && (
+            <div className="flex flex-wrap gap-2">
+              {workshop.categories.map((cat, idx) => (
+                <span key={idx} className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest ${cat.color} text-zinc-950`}>
+                  {cat.name}
+                </span>
+              ))}
             </div>
-        )}
+          )}
+        </header>
+      )}
 
-        <div className="prose prose-lg prose-zinc max-w-none">
-            <p className="text-xl font-medium text-zinc-500 leading-relaxed italic">
-                {workshop.fullDescription}
-            </p>
+      {/* Info bar */}
+      <section className="border-y border-zinc-100 py-6">
+        <div className="max-w-5xl mx-auto px-4 flex flex-wrap items-center gap-6 sm:gap-12">
+          <div className="flex items-center gap-3">
+            <MapPin size={18} className={primaryTextColor} />
+            <span className="text-sm font-bold text-zinc-600">{workshop.location}</span>
+          </div>
+          {workshop.features.length > 0 && workshop.features.map((f, i) => (
+            <div key={i} className="flex items-center gap-2">
+              <Check size={14} className="text-emerald-500" />
+              <span className="text-sm font-medium text-zinc-500">{f}</span>
+            </div>
+          ))}
         </div>
-      </div>
+      </section>
+
+      {/* Description */}
+      <section className="py-16 px-4 max-w-4xl mx-auto">
+        <h2 className="text-3xl sm:text-4xl font-black uppercase italic tracking-tighter text-zinc-900 mb-8">О мероприятии</h2>
+        <div className="text-lg text-zinc-500 font-medium leading-relaxed space-y-4">
+          {workshop.fullDescription.split('\n').filter(p => p.trim()).map((paragraph, i) => (
+            <p key={i}>{paragraph}</p>
+          ))}
+        </div>
+      </section>
+
+      {/* Schedule */}
+      {workshop.schedules.length > 0 && (
+        <section className="py-16 bg-zinc-50">
+          <div className="max-w-4xl mx-auto px-4">
+            <h2 className="text-3xl sm:text-4xl font-black uppercase italic tracking-tighter text-zinc-900 mb-8 text-center">Расписание</h2>
+
+            {workshop.schedules.length > 1 && (
+              <div className="flex gap-4 justify-center mb-10">
+                {workshop.schedules.map((s, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setActiveTab(i)}
+                    className={`px-8 py-4 rounded-2xl font-black uppercase tracking-widest text-xs transition-all ${activeTab === i ? 'bg-zinc-900 text-white shadow-xl' : 'bg-white text-zinc-400'}`}
+                  >
+                    {s.ageLabel}
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {workshop.schedules[activeTab] && (
+              <div className="space-y-3">
+                {workshop.schedules.length === 1 && (
+                  <div className="text-center mb-6 text-sm font-bold text-zinc-400 uppercase tracking-widest">{workshop.schedules[0].ageLabel}</div>
+                )}
+                {workshop.schedules[activeTab].items.map((item, i) => (
+                  <div key={i} className="flex items-center gap-6 p-5 bg-white rounded-2xl border border-zinc-100">
+                    <span className="text-sm font-black text-zinc-900 w-32 shrink-0">{item.time}</span>
+                    <span className="text-sm font-medium text-zinc-600">{item.activity}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </section>
+      )}
+
+      {/* Pricing */}
+      {workshop.pricing.length > 0 && (
+        <section id="register" className="py-16 px-4">
+          <div className="max-w-3xl mx-auto text-center">
+            <h2 className="text-3xl sm:text-4xl font-black uppercase italic tracking-tighter text-zinc-900 mb-12">Стоимость</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-12">
+              {workshop.pricing.map((price, idx) => (
+                <div key={idx} className="p-8 rounded-[2rem] border border-zinc-100 bg-zinc-50 hover:bg-white hover:shadow-xl transition-all duration-300 flex flex-col items-center">
+                  <div className="text-sm font-bold text-zinc-400 uppercase tracking-widest mb-4 text-center">{price.label}</div>
+                  <div className="text-5xl font-black text-zinc-900 mb-2">{price.amount}</div>
+                  {price.onDayAmount && (
+                    <div className="text-xs font-bold text-zinc-400 uppercase tracking-widest mb-6">В день: {price.onDayAmount}</div>
+                  )}
+                  {workshop.registrationLink && (
+                    <a
+                      href={workshop.registrationLink}
+                      target="_blank"
+                      rel="noreferrer"
+                      className={`w-full py-4 ${primaryColor} text-zinc-900 rounded-xl font-black uppercase tracking-[0.2em] text-[10px] flex items-center justify-center gap-2 hover:opacity-90 transition-opacity`}
+                    >
+                      Записаться
+                      <ArrowRight size={14} />
+                    </a>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Registration CTA */}
+      {workshop.registrationLink && (
+        <section className="py-16 px-4">
+          <div className="max-w-3xl mx-auto">
+            <div className="bg-zinc-900 rounded-[3rem] p-8 sm:p-16 text-white text-center">
+              <h3 className="text-3xl sm:text-5xl font-black uppercase italic tracking-tighter mb-6">Готов танцевать?</h3>
+              <p className="text-zinc-400 text-lg font-medium mb-8 max-w-lg mx-auto">
+                Количество мест ограничено. Занимайте свое место прямо сейчас.
+              </p>
+              <a
+                href={workshop.registrationLink}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-3 px-12 py-6 bg-white text-zinc-900 rounded-2xl font-black uppercase tracking-[0.2em] hover:bg-[#fdcc00] hover:scale-105 transition-all shadow-xl"
+              >
+                Записаться
+                <ArrowRight size={20} />
+              </a>
+            </div>
+          </div>
+        </section>
+      )}
     </div>
   );
 };
