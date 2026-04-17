@@ -8,7 +8,6 @@ import {
   deleteDoc,
   query,
   where,
-  orderBy,
   writeBatch,
 } from 'firebase/firestore';
 import { db } from './firebase';
@@ -46,7 +45,7 @@ function docToWorkshop(docSnap: { id: string; data: () => Record<string, unknown
 }
 
 export async function getWorkshops(): Promise<Workshop[]> {
-  const snapshot = await getDocs(query(workshopsRef(), orderBy('date', 'desc')));
+  const snapshot = await getDocs(workshopsRef());
   return snapshot.docs.map(docToWorkshop);
 }
 
