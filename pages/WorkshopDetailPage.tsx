@@ -453,7 +453,7 @@ const WorkshopDetailPage: React.FC = () => {
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-4xl sm:text-6xl font-black uppercase italic tracking-tighter text-zinc-900 mb-4">
-              О <span className="text-pink-500">мероприятии</span>
+              <span className="text-pink-500">О мероприятии</span>
             </h2>
           </div>
           <div className="text-lg sm:text-xl text-zinc-500 font-medium leading-relaxed space-y-6">
@@ -538,7 +538,7 @@ const WorkshopDetailPage: React.FC = () => {
               {workshop.pricing.map((price, idx) => (
                 <div key={idx} className="p-10 rounded-[2rem] border border-zinc-100 bg-white hover:shadow-2xl transition-all duration-300 flex flex-col items-center group">
                   <div className="text-sm font-bold text-zinc-400 uppercase tracking-widest mb-6 text-center h-10 flex items-center">{price.label}</div>
-                  <div className="text-6xl font-black text-zinc-900 mb-2 group-hover:scale-110 transition-transform">{price.amount}</div>
+                  <div className="text-3xl sm:text-4xl font-black text-zinc-900 mb-2 group-hover:scale-105 transition-transform">{price.amount}</div>
                   {price.onDayAmount && (
                     <div className={`text-xs font-bold ${primaryColor.replace('bg-', 'text-')} uppercase tracking-widest mb-8`}>В день: {price.onDayAmount}</div>
                   )}
