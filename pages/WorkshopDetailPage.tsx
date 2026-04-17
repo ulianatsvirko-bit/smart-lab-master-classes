@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useWorkshop } from '../hooks/useWorkshops';
 import {
-  ArrowLeft, Star, Zap,
+  ArrowLeft, Star, Zap, Calendar,
   ChevronDown, ArrowRight, MapPin, Send,
   Users, Heart, Mail, Camera, Check
 } from 'lucide-react';
@@ -325,7 +325,7 @@ const WorkshopDetailPage: React.FC = () => {
 
   // Generic Layout for other workshops
   const primaryColor = workshop.categories[0]?.color || 'bg-[#fdcc00]';
-  const primaryTextColor = primaryColor.replace('bg-', 'text-');
+  const accentColor = workshop.categories[1]?.color || primaryColor;
 
   return (
     <div className="min-h-screen bg-white animate-fadeIn">
@@ -336,82 +336,162 @@ const WorkshopDetailPage: React.FC = () => {
           </Link>
       </nav>
 
-      {/* Hero */}
+      {/* Hero with image */}
       {workshop.imageUrl ? (
-        <header className="relative h-[70vh] flex flex-col justify-end overflow-hidden bg-zinc-900">
+        <header className="relative h-[95vh] flex flex-col justify-end items-center overflow-hidden bg-zinc-900 pb-12">
           <div className="absolute inset-0">
             <img src={workshop.imageUrl} alt={workshop.title} className="w-full h-full object-cover opacity-80" />
-            <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-zinc-950/80" />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-zinc-950/90" />
           </div>
-          <div className="relative z-10 max-w-5xl mx-auto px-4 pb-12 w-full">
-            <span className="inline-block px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-[10px] font-black uppercase tracking-[0.2em] mb-4">
-              {workshop.date}
-            </span>
-            <h1 className="text-5xl sm:text-7xl font-black uppercase italic tracking-tighter text-white mb-4 leading-none">
-              {workshop.title}
-            </h1>
+          <div className="relative z-10 w-full max-w-5xl mx-auto px-4 text-center">
             {workshop.categories.length > 0 && (
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap justify-center gap-2 mb-6">
                 {workshop.categories.map((cat, idx) => (
-                  <span key={idx} className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest ${cat.color} text-zinc-950`}>
+                  <span key={idx} className={`px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest ${cat.color} text-zinc-950 shadow-lg`}>
                     {cat.name}
                   </span>
                 ))}
               </div>
             )}
+            <h1 className="text-5xl sm:text-7xl md:text-8xl font-black uppercase italic tracking-tighter text-white mb-6 leading-[0.85]">
+              {workshop.title}
+            </h1>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              {workshop.registrationLink && (
+                <a
+                  href={workshop.registrationLink}
+                  target="_blank"
+                  rel="noreferrer"
+                  className={`w-full sm:w-auto px-10 py-5 ${primaryColor} rounded-2xl font-black uppercase tracking-widest text-zinc-900 shadow-2xl hover:scale-105 transition-transform flex items-center justify-center gap-3 text-sm`}
+                >
+                  Записаться сейчас
+                  <Send size={18} />
+                </a>
+              )}
+              <div className="w-full sm:w-auto px-10 py-5 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl font-black uppercase tracking-widest text-white flex items-center justify-center gap-3 text-sm">
+                <MapPin size={18} className={primaryColor.replace('bg-', 'text-')} />
+                {workshop.location}
+              </div>
+            </div>
           </div>
         </header>
       ) : (
-        <header className="pt-32 pb-16 px-4 max-w-5xl mx-auto">
-          <span className="inline-block px-4 py-2 rounded-full bg-zinc-100 text-zinc-500 text-[10px] font-black uppercase tracking-[0.2em] mb-6">
-            {workshop.date}
-          </span>
-          <h1 className="text-5xl sm:text-7xl font-black uppercase italic tracking-tighter text-zinc-900 mb-4 leading-none">
-            {workshop.title}
-          </h1>
-          {workshop.categories.length > 0 && (
-            <div className="flex flex-wrap gap-2">
-              {workshop.categories.map((cat, idx) => (
-                <span key={idx} className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest ${cat.color} text-zinc-950`}>
-                  {cat.name}
-                </span>
-              ))}
-            </div>
-          )}
+        <header className="relative pt-32 pb-20 px-4 overflow-hidden bg-mesh">
+          <div className="max-w-5xl mx-auto text-center relative z-10">
+            {workshop.categories.length > 0 && (
+              <div className="flex flex-wrap justify-center gap-2 mb-6">
+                {workshop.categories.map((cat, idx) => (
+                  <span key={idx} className={`px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest ${cat.color} text-zinc-950`}>
+                    {cat.name}
+                  </span>
+                ))}
+              </div>
+            )}
+            <h1 className="text-5xl sm:text-7xl md:text-8xl font-black uppercase italic tracking-tighter text-zinc-900 mb-6 leading-[0.85]">
+              {workshop.title}
+            </h1>
+            <p className="text-zinc-400 text-lg font-medium mb-8">{workshop.date} &bull; {workshop.location}</p>
+            {workshop.registrationLink && (
+              <a
+                href={workshop.registrationLink}
+                target="_blank"
+                rel="noreferrer"
+                className={`inline-flex items-center gap-3 px-10 py-5 ${primaryColor} rounded-2xl font-black uppercase tracking-widest text-zinc-900 shadow-2xl hover:scale-105 transition-transform text-sm`}
+              >
+                Записаться
+                <Send size={18} />
+              </a>
+            )}
+          </div>
         </header>
       )}
 
-      {/* Info bar */}
-      <section className="border-y border-zinc-100 py-6">
-        <div className="max-w-5xl mx-auto px-4 flex flex-wrap items-center gap-6 sm:gap-12">
-          <div className="flex items-center gap-3">
-            <MapPin size={18} className={primaryTextColor} />
-            <span className="text-sm font-bold text-zinc-600">{workshop.location}</span>
-          </div>
-          {workshop.features.length > 0 && workshop.features.map((f, i) => (
-            <div key={i} className="flex items-center gap-2">
-              <Check size={14} className="text-emerald-500" />
-              <span className="text-sm font-medium text-zinc-500">{f}</span>
+      {/* Highlights bar */}
+      <section className="py-12 border-b border-zinc-100">
+        <div className="max-w-5xl mx-auto px-4 flex flex-wrap justify-center items-center gap-y-8 gap-x-6 sm:gap-x-12">
+          <div className="flex items-center gap-4">
+            <div className={`w-12 h-12 ${primaryColor} rounded-2xl flex items-center justify-center shadow-lg`}>
+              <Calendar size={22} className="text-zinc-900" />
             </div>
-          ))}
+            <div className="flex flex-col">
+              <span className="text-lg sm:text-xl font-black italic uppercase text-zinc-900">{workshop.date}</span>
+              <span className="text-[9px] font-bold text-zinc-400 uppercase tracking-widest">Дата</span>
+            </div>
+          </div>
+
+          <div className="hidden sm:block w-px h-10 bg-zinc-200" />
+
+          <div className="flex items-center gap-4">
+            <div className={`w-12 h-12 ${accentColor} rounded-2xl flex items-center justify-center shadow-lg`}>
+              <MapPin size={22} className="text-zinc-900" />
+            </div>
+            <div className="flex flex-col">
+              <span className="text-lg sm:text-xl font-black italic uppercase text-zinc-900">{workshop.location}</span>
+              <span className="text-[9px] font-bold text-zinc-400 uppercase tracking-widest">Адрес</span>
+            </div>
+          </div>
+
+          {workshop.features.length > 0 && (
+            <>
+              <div className="hidden sm:block w-px h-10 bg-zinc-200" />
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-zinc-900 rounded-2xl flex items-center justify-center shadow-lg">
+                  <Zap size={22} className="text-white" />
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-lg sm:text-xl font-black italic uppercase text-zinc-900">{workshop.features.length} фичей</span>
+                  <span className="text-[9px] font-bold text-zinc-400 uppercase tracking-widest">Включено</span>
+                </div>
+              </div>
+            </>
+          )}
         </div>
       </section>
 
-      {/* Description */}
-      <section className="py-16 px-4 max-w-4xl mx-auto">
-        <h2 className="text-3xl sm:text-4xl font-black uppercase italic tracking-tighter text-zinc-900 mb-8">О мероприятии</h2>
-        <div className="text-lg text-zinc-500 font-medium leading-relaxed space-y-4">
-          {workshop.fullDescription.split('\n').filter(p => p.trim()).map((paragraph, i) => (
-            <p key={i}>{paragraph}</p>
-          ))}
+      {/* About */}
+      <section className="py-20 px-4">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl sm:text-6xl font-black uppercase italic tracking-tighter text-zinc-900 mb-4">
+              О <span className={primaryColor.replace('bg-', 'text-')}>мероприятии</span>
+            </h2>
+          </div>
+          <div className="text-lg sm:text-xl text-zinc-500 font-medium leading-relaxed space-y-6">
+            {workshop.fullDescription.split('\n').filter(p => p.trim()).map((paragraph, i) => (
+              <p key={i} className={i === 0 ? 'text-zinc-700 text-xl sm:text-2xl font-bold italic' : ''}>
+                {paragraph}
+              </p>
+            ))}
+          </div>
         </div>
       </section>
+
+      {/* Features */}
+      {workshop.features.length > 0 && (
+        <section className="py-20 bg-zinc-50 border-y border-zinc-100">
+          <div className="max-w-5xl mx-auto px-4">
+            <h2 className="text-4xl sm:text-6xl font-black uppercase italic tracking-tighter text-zinc-900 mb-12 text-center">
+              Что <span className={primaryColor.replace('bg-', 'text-')}>включено</span>
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {workshop.features.map((feature, i) => (
+                <div key={i} className="group p-8 rounded-[2rem] bg-white border border-zinc-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                  <div className={`w-10 h-10 ${i % 2 === 0 ? primaryColor : accentColor} rounded-xl flex items-center justify-center mb-4 shadow-md group-hover:scale-110 group-hover:rotate-6 transition-transform`}>
+                    <Check size={20} className="text-zinc-900" />
+                  </div>
+                  <p className="text-sm font-bold text-zinc-700">{feature}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Schedule */}
       {workshop.schedules.length > 0 && (
-        <section className="py-16 bg-zinc-50">
+        <section className="py-20">
           <div className="max-w-4xl mx-auto px-4">
-            <h2 className="text-3xl sm:text-4xl font-black uppercase italic tracking-tighter text-zinc-900 mb-8 text-center">Расписание</h2>
+            <h2 className="text-4xl sm:text-6xl font-black uppercase italic tracking-tighter text-zinc-900 mb-12 text-center">Расписание</h2>
 
             {workshop.schedules.length > 1 && (
               <div className="flex gap-4 justify-center mb-10">
@@ -419,7 +499,7 @@ const WorkshopDetailPage: React.FC = () => {
                   <button
                     key={i}
                     onClick={() => setActiveTab(i)}
-                    className={`px-8 py-4 rounded-2xl font-black uppercase tracking-widest text-xs transition-all ${activeTab === i ? 'bg-zinc-900 text-white shadow-xl' : 'bg-white text-zinc-400'}`}
+                    className={`px-8 py-4 rounded-2xl font-black uppercase tracking-widest text-xs transition-all ${activeTab === i ? 'bg-zinc-900 text-white shadow-xl' : 'bg-white text-zinc-400 border border-zinc-100'}`}
                   >
                     {s.ageLabel}
                   </button>
@@ -428,14 +508,19 @@ const WorkshopDetailPage: React.FC = () => {
             )}
 
             {workshop.schedules[activeTab] && (
-              <div className="space-y-3">
+              <div className="space-y-4">
                 {workshop.schedules.length === 1 && (
-                  <div className="text-center mb-6 text-sm font-bold text-zinc-400 uppercase tracking-widest">{workshop.schedules[0].ageLabel}</div>
+                  <div className="text-center mb-8 text-sm font-bold text-zinc-400 uppercase tracking-widest">{workshop.schedules[0].ageLabel}</div>
                 )}
                 {workshop.schedules[activeTab].items.map((item, i) => (
-                  <div key={i} className="flex items-center gap-6 p-5 bg-white rounded-2xl border border-zinc-100">
-                    <span className="text-sm font-black text-zinc-900 w-32 shrink-0">{item.time}</span>
-                    <span className="text-sm font-medium text-zinc-600">{item.activity}</span>
+                  <div key={i} className="flex items-center gap-6 p-6 bg-white rounded-[2rem] border border-zinc-100 hover:shadow-lg hover:border-zinc-200 transition-all group">
+                    <div className={`w-14 h-14 ${i % 2 === 0 ? primaryColor : accentColor} rounded-2xl flex items-center justify-center shadow-md shrink-0 group-hover:scale-110 transition-transform`}>
+                      <span className="text-xs font-black text-zinc-900">{String(i + 1).padStart(2, '0')}</span>
+                    </div>
+                    <div>
+                      <span className="text-sm font-black text-zinc-900 block">{item.time}</span>
+                      <span className="text-sm font-medium text-zinc-500">{item.activity}</span>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -446,23 +531,23 @@ const WorkshopDetailPage: React.FC = () => {
 
       {/* Pricing */}
       {workshop.pricing.length > 0 && (
-        <section id="register" className="py-16 px-4">
-          <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-3xl sm:text-4xl font-black uppercase italic tracking-tighter text-zinc-900 mb-12">Стоимость</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-12">
+        <section id="register" className="py-20 bg-zinc-50 border-y border-zinc-100">
+          <div className="max-w-3xl mx-auto text-center px-4">
+            <h2 className="text-4xl sm:text-6xl font-black uppercase italic tracking-tighter text-zinc-900 mb-16">Стоимость</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-16">
               {workshop.pricing.map((price, idx) => (
-                <div key={idx} className="p-8 rounded-[2rem] border border-zinc-100 bg-zinc-50 hover:bg-white hover:shadow-xl transition-all duration-300 flex flex-col items-center">
-                  <div className="text-sm font-bold text-zinc-400 uppercase tracking-widest mb-4 text-center">{price.label}</div>
-                  <div className="text-5xl font-black text-zinc-900 mb-2">{price.amount}</div>
+                <div key={idx} className="p-10 rounded-[2rem] border border-zinc-100 bg-white hover:shadow-2xl transition-all duration-300 flex flex-col items-center group">
+                  <div className="text-sm font-bold text-zinc-400 uppercase tracking-widest mb-6 text-center h-10 flex items-center">{price.label}</div>
+                  <div className="text-6xl font-black text-zinc-900 mb-2 group-hover:scale-110 transition-transform">{price.amount}</div>
                   {price.onDayAmount && (
-                    <div className="text-xs font-bold text-zinc-400 uppercase tracking-widest mb-6">В день: {price.onDayAmount}</div>
+                    <div className={`text-xs font-bold ${primaryColor.replace('bg-', 'text-')} uppercase tracking-widest mb-8`}>В день: {price.onDayAmount}</div>
                   )}
                   {workshop.registrationLink && (
                     <a
                       href={workshop.registrationLink}
                       target="_blank"
                       rel="noreferrer"
-                      className={`w-full py-4 ${primaryColor} text-zinc-900 rounded-xl font-black uppercase tracking-[0.2em] text-[10px] flex items-center justify-center gap-2 hover:opacity-90 transition-opacity`}
+                      className={`w-full py-5 ${primaryColor} text-zinc-900 rounded-2xl font-black uppercase tracking-[0.2em] text-[10px] flex items-center justify-center gap-2 hover:shadow-lg hover:-translate-y-1 transition-all`}
                     >
                       Записаться
                       <ArrowRight size={14} />
@@ -477,18 +562,19 @@ const WorkshopDetailPage: React.FC = () => {
 
       {/* Registration CTA */}
       {workshop.registrationLink && (
-        <section className="py-16 px-4">
+        <section className="py-20 px-4">
           <div className="max-w-3xl mx-auto">
-            <div className="bg-zinc-900 rounded-[3rem] p-8 sm:p-16 text-white text-center">
-              <h3 className="text-3xl sm:text-5xl font-black uppercase italic tracking-tighter mb-6">Готов танцевать?</h3>
-              <p className="text-zinc-400 text-lg font-medium mb-8 max-w-lg mx-auto">
+            <div className="bg-zinc-900 rounded-[3rem] p-8 sm:p-16 text-white text-center relative overflow-hidden group">
+              <div className="absolute inset-0 bg-gradient-to-br from-pink-500/10 via-transparent to-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+              <h3 className="text-3xl sm:text-5xl font-black uppercase italic tracking-tighter mb-6 relative z-10">Готов танцевать?</h3>
+              <p className="text-zinc-400 text-lg font-medium mb-8 max-w-lg mx-auto relative z-10">
                 Количество мест ограничено. Занимайте свое место прямо сейчас.
               </p>
               <a
                 href={workshop.registrationLink}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-3 px-12 py-6 bg-white text-zinc-900 rounded-2xl font-black uppercase tracking-[0.2em] hover:bg-[#fdcc00] hover:scale-105 transition-all shadow-xl"
+                className="relative z-10 inline-flex items-center gap-3 px-12 py-6 bg-white text-zinc-900 rounded-2xl font-black uppercase tracking-[0.2em] hover:bg-[#fdcc00] hover:scale-105 transition-all shadow-xl"
               >
                 Записаться
                 <ArrowRight size={20} />
