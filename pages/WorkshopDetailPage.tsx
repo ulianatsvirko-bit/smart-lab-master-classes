@@ -508,21 +508,34 @@ const WorkshopDetailPage: React.FC = () => {
             )}
 
             {workshop.schedules[activeTab] && (
-              <div className="space-y-4">
+              <div>
                 {workshop.schedules.length === 1 && (
                   <div className="text-center mb-8 text-sm font-bold text-zinc-400 uppercase tracking-widest">{workshop.schedules[0].ageLabel}</div>
                 )}
-                {workshop.schedules[activeTab].items.map((item, i) => (
-                  <div key={i} className="flex items-center gap-6 p-6 bg-white rounded-[2rem] border border-zinc-100 hover:shadow-lg hover:border-zinc-200 transition-all group">
-                    <div className={`w-14 h-14 ${i % 2 === 0 ? primaryColor : accentColor} rounded-2xl flex items-center justify-center shadow-md shrink-0 group-hover:scale-110 transition-transform`}>
-                      <span className="text-xs font-black text-zinc-900">{String(i + 1).padStart(2, '0')}</span>
-                    </div>
-                    <div>
-                      <span className="text-sm font-black text-zinc-900 block">{item.time}</span>
-                      <span className="text-sm font-medium text-zinc-500">{item.activity}</span>
-                    </div>
+
+                {workshop.schedules[activeTab].imageUrl ? (
+                  <div className="w-full sm:max-w-2xl sm:mx-auto sm:rounded-[3rem] sm:overflow-hidden sm:shadow-2xl sm:border sm:border-zinc-100 sm:bg-white sm:p-4">
+                    <img
+                      src={workshop.schedules[activeTab].imageUrl}
+                      alt={`Расписание — ${workshop.schedules[activeTab].ageLabel}`}
+                      className="w-full h-auto block"
+                    />
                   </div>
-                ))}
+                ) : (
+                  <div className="space-y-4">
+                    {workshop.schedules[activeTab].items.map((item, i) => (
+                      <div key={i} className="flex items-center gap-6 p-6 bg-white rounded-[2rem] border border-zinc-100 hover:shadow-lg hover:border-zinc-200 transition-all group">
+                        <div className={`w-14 h-14 ${i % 2 === 0 ? primaryColor : accentColor} rounded-2xl flex items-center justify-center shadow-md shrink-0 group-hover:scale-110 transition-transform`}>
+                          <span className="text-xs font-black text-zinc-900">{String(i + 1).padStart(2, '0')}</span>
+                        </div>
+                        <div>
+                          <span className="text-sm font-black text-zinc-900 block">{item.time}</span>
+                          <span className="text-sm font-medium text-zinc-500">{item.activity}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             )}
           </div>

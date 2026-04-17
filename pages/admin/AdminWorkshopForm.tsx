@@ -148,6 +148,12 @@ const AdminWorkshopForm: React.FC = () => {
     );
     updateField('schedules', updated);
   };
+  const updateScheduleImageUrl = (index: number, value: string) => {
+    const updated = form.schedules.map((s, i) =>
+      i === index ? { ...s, imageUrl: value } : s
+    );
+    updateField('schedules', updated);
+  };
   const addScheduleItem = (scheduleIndex: number) => {
     const updated = form.schedules.map((s, i) =>
       i === scheduleIndex ? { ...s, items: [...s.items, { time: '', activity: '' }] } : s
@@ -437,6 +443,16 @@ const AdminWorkshopForm: React.FC = () => {
                   <button type="button" onClick={() => removeSchedule(si)} className="p-2 text-zinc-500 hover:text-red-400">
                     <X size={16} />
                   </button>
+                </div>
+                <div className="pl-4">
+                  <label className="block text-[9px] font-bold uppercase tracking-widest text-zinc-500 mb-1">Фото расписания (URL)</label>
+                  <input
+                    type="text"
+                    value={schedule.imageUrl || ''}
+                    onChange={e => updateScheduleImageUrl(si, e.target.value)}
+                    className={inputClass}
+                    placeholder="https://i.ibb.co/... (прямая ссылка на картинку)"
+                  />
                 </div>
 
                 {schedule.items.map((item, ii) => (

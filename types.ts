@@ -17,6 +17,7 @@ export interface ScheduleItem {
 
 export interface AgeGroupSchedule {
   ageLabel: string;
+  imageUrl?: string;
   items: ScheduleItem[];
 }
 
